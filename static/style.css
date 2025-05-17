@@ -1,0 +1,8 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.card.bg-primary {
+    background-color: rgba(0, 123, 255, 0.9) !important;
+    color: white;
+}

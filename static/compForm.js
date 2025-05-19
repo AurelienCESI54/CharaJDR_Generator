@@ -53,3 +53,19 @@ function removeCompetence(index) {
   updateCompetencesDisplay();
   document.getElementById('competences-hidden').value = JSON.stringify(competences);
 }
+
+// Importation JSON
+window.loadCompetencesFromJSON = function(newCompetences) {
+  if (!Array.isArray(newCompetences)) return;
+  competences = [];
+  for (let i = 0; i < newCompetences.length && competences.length < 6; i++) {
+    const c = newCompetences[i];
+    if (c.nom && c.desc) {
+      competences.push({
+        nom: String(c.nom).trim().slice(0, 30),
+        desc: String(c.desc).trim().slice(0, 200)
+      });
+    }
+  }
+  updateCompetencesDisplay();
+};

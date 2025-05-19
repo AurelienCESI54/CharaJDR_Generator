@@ -77,7 +77,7 @@ def add_text(pdf, text, y, left_margin=50, right_margin=50):
         fontSize=font_size,
         leading=font_size * 1.2,
         alignment=TA_JUSTIFY,
-        textColor='white'
+        textColor='black'
     )
 
     para = Paragraph(text, justified_style)
@@ -89,9 +89,9 @@ def add_text(pdf, text, y, left_margin=50, right_margin=50):
 
 # Arrière-plan du texte
 def draw_text_background(pdf, x, y, width, height, radius=16):
-    img = Image.new("RGBA", (int(width), int(height)), (0, 0, 0, int(0.6 * 255)))
+    img = Image.new("RGBA", (int(width), int(height)), (255, 255, 255, int(0.6 * 255)))
     draw = ImageDraw.Draw(img)
-    draw.rectangle([0, 0, width, height], outline=(255, 255, 255, 255), width=2)
+    draw.rectangle([0, 0, width, height], outline=(0, 0, 0, 255), width=2)
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     buffer.seek(0)

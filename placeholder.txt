@@ -1,0 +1,31 @@
+Nom : Elian Draven
+
+Âge : 27 ans
+
+Genre : Masculin
+
+Race : Demi-elfe
+
+Description morale et physique (450 caractères)
+Grand et élancé, Elian possède des traits fins hérités de sa mère elfe et des yeux verts perçants. Sa chevelure sombre contraste avec sa peau claire. Réservé et réfléchi, il préfère l’observation à l’action précipitée. Loyal envers ses proches, il cache une profonde méfiance envers les étrangers, forgée par un passé difficile.
+
+Histoire et relations (450 caractères)
+Fils d’une elfe et d’un humain, Elian a grandi à la frontière des deux mondes, souvent rejeté par les siens. Orphelin jeune, il a été recueilli par un vieux mage humain qui lui a transmis savoir et valeurs. Il cherche aujourd’hui à prouver sa valeur, oscillant entre deux cultures. Il entretient une amitié fidèle avec Lira, une voleuse humaine, et garde rancune envers ceux qui l’ont exclu.
+
+6 compétences (nom + description)
+
+Perception accrue : Repère facilement pièges et mouvements suspects.
+
+Magie élémentaire : Maîtrise de sorts de feu et de vent.
+
+Discrétion : Se déplace silencieusement, même en terrain difficile.
+
+Diplomatie : Sait calmer les tensions et négocier avec divers peuples.
+
+Esquive : Réflexes rapides pour éviter attaques et projectiles.
+
+Premiers soins : Capable de soigner blessures légères sur lui ou ses alliés.
+
+Points de vie : 32
+
+Points de dégâts : 6

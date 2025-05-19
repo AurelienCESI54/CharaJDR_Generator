@@ -97,11 +97,19 @@ def index():
 
         # PDF
         genre = data['sexe'] if data['sexe'] else "Asexué"
+        # Chemins des icônes (à adapter selon l'endroit où tu les places)
+        vie_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'vie.png')
+        degat_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'degat.png')
         infos = [
             f"{data['race']} de {data['age']} ans",
             f"Genre : {genre}",
-            f"{data['pv']} points de vie - {data['pd']} points de dégâts",
-            f"---",
+            {
+                "pv": data['pv'],
+                "pd": data['pd'],
+                "vie_icon": vie_icon,
+                "degat_icon": degat_icon
+            },
+            "---",
             f"{data['descP'][:500]}",
             f"{data['descH'][:500]}"
         ]

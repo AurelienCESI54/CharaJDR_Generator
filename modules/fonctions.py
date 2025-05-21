@@ -2,22 +2,22 @@
 import os
 from flask import flash, render_template
 
-# Data converter
+# Convertisseur de données
 def convert(data, format):
     try:
         return format(data)
     except (ValueError, TypeError):
-        raise ValueError(f"Cannot convert '{data}' to {format.__name__}")
+        raise ValueError(f"Impossible de convertir '{data}' en {format.__name__}")
 
-# Import data from form
+# Importation de données depuis le formulaire
 def importForm(form, data):
     return {field: form.get(field, '').strip() for field in data}
 
-# Reset form
+# Restart du formulaire
 def restart(data):
     return render_template('index.html', **data)
 
-# Image handling
+# Gestion d'image
 def handle_uploaded_image(file, allowed_exts, upload_folder, filename, flash_msg, render_func, render_kwargs):
     if file and file.filename != '':
         ext = file.filename.rsplit('.', 1)[1].lower()

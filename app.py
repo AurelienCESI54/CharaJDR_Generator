@@ -10,21 +10,18 @@ from modules.validation import *
 app = Flask(__name__)
 app.secret_key = 'charajdrgen'
 
-# Upload folder for images
+# Dossier d'upload pour les images
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'upload_files')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    data = {
-        'name': '', 'age': '', 'gender': '', 'race': '', 'hp': '', 'dmg': '',
-        'descP': '', 'descH': '', 'skills': '[]', 'background_filename': '', 'avatar_filename': ''
-    }
+    data = {'nom': '',  'age': '',  'sexe': '',  'race': '',  'pv': '',  'pd': '',  'descP': '',  'descH': '', 'competences': '[]', 'background_filename': '', 'avatar_filename': ''}
 
     if request.method == 'POST':
 
-        # Retrieve data
-        fields = ['name', 'age', 'gender', 'race', 'hp', 'dmg', 'descP', 'descH', 'skills']
+        # Récupération des données
+        fields = ['nom', 'age', 'sexe', 'race', 'pv', 'pd', 'descP', 'descH', 'competences']
         data.update(importForm(request.form, fields))
         data['background_filename'] = request.form.get('background_filename', '')
         data['avatar_filename'] = request.form.get('avatar_filename', '')
@@ -32,20 +29,20 @@ def index():
         # Conversion
         try:
             data['age'] = convert(data['age'], int)
-            data['hp'] = convert(data['hp'], int)
-            data['dmg'] = convert(data['dmg'], int)
+            data['pv'] = convert(data['pv'], int)
+            data['pd'] = convert(data['pd'], int)
         except ValueError:
-            flash("A numeric value is missing or incorrect.", 'error')
+            flash("Une valeur nombre est manquante ou incorrecte.", 'error')
             return restart(data)
 
         # Images
         background_file = request.files.get('background')
         if background_file and background_file.filename != '':
             ext = background_file.filename.rsplit('.', 1)[1].lower()
-            bg_filename = f"bg_{data['name']}_{data['age']}.{ext}"
+            bg_filename = f"bg_{data['nom']}_{data['age']}.{ext}"
             bg_path = handle_uploaded_image(
                 background_file, ['jpg', 'jpeg', 'png'], app.config['UPLOAD_FOLDER'], bg_filename,
-                "Unsupported image format for background.", render_template, data
+                "Format d'image non supporté pour l'arrière-plan.", render_template, data
             )
             if not (isinstance(bg_path, str) or bg_path is None):
                 return bg_path
@@ -58,10 +55,10 @@ def index():
         avatar_file = request.files.get('avatar')
         if avatar_file and avatar_file.filename != '':
             ext = avatar_file.filename.rsplit('.', 1)[1].lower()
-            avatar_filename = f"avatar_{data['name']}_{data['age']}.{ext}"
+            avatar_filename = f"avatar_{data['nom']}_{data['age']}.{ext}"
             avatar_path = handle_uploaded_image(
                 avatar_file, ['jpg', 'jpeg', 'png'], app.config['UPLOAD_FOLDER'], avatar_filename,
-                "Unsupported image format for avatar.", render_template, data
+                "Format d'image non supporté pour l'avatar.", render_template, data
             )
             if not (isinstance(avatar_path, str) or avatar_path is None):
                 return avatar_path
@@ -74,43 +71,43 @@ def index():
         data['background_path'] = bg_path
         data['avatar_path'] = avatar_path
 
-        # Skills
-        skills = []
-        if data.get('skills'):
+        # Compétences
+        competences = []
+        if data.get('competences'):
             try:
-                skills = json.loads(data['skills'])
-                skills = [
+                competences = json.loads(data['competences'])
+                competences = [
                     {
-                        'name': c.get('name', '').strip()[:30],
+                        'nom': c.get('nom', '').strip()[:30],
                         'desc': c.get('desc', '').strip()[:200]
                     }
-                    for c in skills if c.get('name') and c.get('desc')
+                    for c in competences if c.get('nom') and c.get('desc')
                 ]
             except Exception:
-                flash("Error reading skills.", 'error')
+                flash("Erreur lors de la lecture des compétences.", 'error')
                 return restart(data)
-        data['skills'] = skills
+        data['competences'] = competences
 
         # Validations
         error = validation(data)
         if error:
-            data['skills'] = json.dumps(data['skills'])
+            data['competences'] = json.dumps(data['competences'])
             flash(error, 'error')
             return restart(data)
 
         # PDF
-        gender = data['gender'] if data['gender'] else "Agender"
-        # Icon paths (adapt according to where you place them)
-        hp_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'hp.png')
-        dmg_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'dmg.png')
+        genre = data['sexe'] if data['sexe'] else "Asexué"
+        # Chemins des icônes (à adapter selon l'endroit où tu les places)
+        vie_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'vie.png')
+        degat_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'degat.png')
         infos = [
-            f"{data['race']} aged {data['age']}",
-            f"Gender: {gender}",
+            f"{data['race']} de {data['age']} ans",
+            f"Genre : {genre}",
             {
-                "hp": data['hp'],
-                "dmg": data['dmg'],
-                "hp_icon": hp_icon,
-                "dmg_icon": dmg_icon
+                "pv": data['pv'],
+                "pd": data['pd'],
+                "vie_icon": vie_icon,
+                "degat_icon": degat_icon
             },
             "---",
             f"{data['descP'][:500]}",
@@ -119,9 +116,9 @@ def index():
 
         return send_file(
             generatePDF(
-                data['name'][:30],
+                data['nom'][:30],
                 infos,
-                competences=data['skills'],
+                competences=data['competences'],
                 avatar_path=avatar_path,
                 bg_path=bg_path
             ),

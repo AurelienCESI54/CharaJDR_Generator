@@ -4,7 +4,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 from PIL import Image, ImageDraw
 
-# Background
+# Arrière-plan
 def add_background(pdf, bg_path):
     if bg_path:
         try:
@@ -17,7 +17,7 @@ def add_background(pdf, bg_path):
                 mask='auto'
             )
         except Exception as e:
-            print(f"Error adding background image: {e}")
+            print(f"Erreur lors de l'ajout de l'image de fond : {e}")
 
 # Avatar
 def add_avatar(pdf, avatar_path, x=500, y=750, size=75, border=4):
@@ -50,4 +50,4 @@ def add_avatar(pdf, avatar_path, x=500, y=750, size=75, border=4):
                 mask='auto'
             )
         except Exception as e:
-            print(f"Error adding avatar: {e}")
+            print(f"Erreur lors de l'ajout de l'avatar : {e}")

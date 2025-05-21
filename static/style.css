@@ -1,5 +1,9 @@
 body {
-    background-color: #f8f9fa;
+    background-image: url('bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
 }
 
 .card.bg-primary {

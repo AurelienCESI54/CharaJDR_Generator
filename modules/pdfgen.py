@@ -12,7 +12,7 @@ def add_competences(pdf, competences, x=50, y_start=700, line_height=16, max_wid
         return y_start
     
     page_width, _ = A4
-    title = "COMPETENCES"
+    title = "SKILLS"
     font_name = "Helvetica-Bold"
     font_size = 14
     text_width = pdf.stringWidth(title, font_name, font_size)
@@ -23,20 +23,20 @@ def add_competences(pdf, competences, x=50, y_start=700, line_height=16, max_wid
     pdf.drawString(x_centered, y_start, title)
     y = y_start - line_height * 2
 
-    font_name_nom = "Helvetica-Bold"
+    font_name_name = "Helvetica-Bold"
     font_name_desc = "Helvetica"
-    font_size_nom = 12
+    font_size_name = 12
     font_size_desc = 11
 
     for c in competences:
-        nom = c.get('nom', '').strip()[:30]
+        name = c.get('nom', '').strip()[:30]
         desc = c.get('desc', '').strip()[:200]
 
-        if not nom or not desc:
+        if not name or not desc:
             continue
 
-        pdf.setFont(font_name_nom, font_size_nom)
-        pdf.drawString(x, y, f"--- {nom}")
+        pdf.setFont(font_name_name, font_size_name)
+        pdf.drawString(x, y, f"--- {name}")
         y -= line_height
 
         pdf.setFont(font_name_desc, font_size_desc)
@@ -56,43 +56,43 @@ def add_competences(pdf, competences, x=50, y_start=700, line_height=16, max_wid
 
     return y
 
-def add_icons(pdf, pv, pd, vie_icon, degat_icon, y=25, icon_size=25, spacing=40):
+def add_icons(pdf, hp, dmg, hp_icon, dmg_icon, y=25, icon_size=25, spacing=40):
     font_name = "Helvetica-Bold"
     font_size = 13
     page_width, _ = A4
 
     pdf.setFont(font_name, font_size)
-    pv_text = str(pv)
-    pd_text = str(pd)
-    pv_text_width = pdf.stringWidth(pv_text, font_name, font_size)
-    pd_text_width = pdf.stringWidth(pd_text, font_name, font_size)
+    hp_text = str(hp)
+    dmg_text = str(dmg)
+    hp_text_width = pdf.stringWidth(hp_text, font_name, font_size)
+    dmg_text_width = pdf.stringWidth(dmg_text, font_name, font_size)
 
-    pv_block_width = icon_size + 3 + pv_text_width
-    pd_block_width = icon_size + 3 + pd_text_width
+    hp_block_width = icon_size + 3 + hp_text_width
+    dmg_block_width = icon_size + 3 + dmg_text_width
 
-    total_width = pv_block_width + spacing + pd_block_width
+    total_width = hp_block_width + spacing + dmg_block_width
 
     x_start = (page_width - total_width) / 2
 
-    if vie_icon and os.path.exists(vie_icon):
-        pdf.drawImage(vie_icon, x_start, y - icon_size + 4, width=icon_size, height=icon_size, mask='auto')
-    pdf.drawString(x_start + icon_size + 3, y, pv_text)
+    if hp_icon and os.path.exists(hp_icon):
+        pdf.drawImage(hp_icon, x_start, y - icon_size + 4, width=icon_size, height=icon_size, mask='auto')
+    pdf.drawString(x_start + icon_size + 3, y, hp_text)
 
-    x_pd = x_start + pv_block_width + spacing
-    if degat_icon and os.path.exists(degat_icon):
-        pdf.drawImage(degat_icon, x_pd, y - icon_size + 4, width=icon_size, height=icon_size, mask='auto')
-    pdf.drawString(x_pd + icon_size + 3, y, pd_text)
+    x_dmg = x_start + hp_block_width + spacing
+    if dmg_icon and os.path.exists(dmg_icon):
+        pdf.drawImage(dmg_icon, x_dmg, y - icon_size + 4, width=icon_size, height=icon_size, mask='auto')
+    pdf.drawString(x_dmg + icon_size + 3, y, dmg_text)
 
     return y - icon_size - 6
 
 
-def generatePDF(nom, infos, competences=None, avatar_path=None, bg_path=None):
+def generatePDF(name, infos, competences=None, avatar_path=None, bg_path=None):
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=A4)
     pdf.setTitle("JDR_Character")
 
     add_background(pdf, bg_path)
-    add_title(pdf, nom)
+    add_title(pdf, name)
     draw_text_background(pdf, 30, 50, 530, 730, radius=16)
     add_avatar(pdf, avatar_path)
 
@@ -104,13 +104,13 @@ def generatePDF(nom, infos, competences=None, avatar_path=None, bg_path=None):
         page_width, page_height = A4
         max_width = page_width - 100 - 50
 
-        # Si c'est la ligne PV/PD avec icônes
+        # If it's the HP/DMG line with icons
         if isinstance(info, dict) and 'pv' in info and 'pd' in info and 'vie_icon' in info and 'degat_icon' in info:
-            needed_height = 24  # hauteur estimée pour la ligne avec icônes
+            needed_height = 24  # estimated height for the line with icons
             if y - needed_height < bottom_margin:
                 pdf.showPage()
                 add_background(pdf, bg_path)
-                add_title(pdf, nom)
+                add_title(pdf, name)
                 add_avatar(pdf, avatar_path)
                 y = 760
             y = add_icons(pdf, info['pv'], info['pd'], info['vie_icon'], info['degat_icon'], y=y)
@@ -123,7 +123,7 @@ def generatePDF(nom, infos, competences=None, avatar_path=None, bg_path=None):
         if y - needed_height < bottom_margin:
             pdf.showPage()
             add_background(pdf, bg_path)
-            add_title(pdf, nom)
+            add_title(pdf, name)
             add_avatar(pdf, avatar_path)
             y = 760
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>CharaJDR_Generator</title>
@@ -9,17 +9,24 @@
   <body class="bg-light">
 
     <div class="container py-5">
-      <h1 class="text-primary fw-bold text-center mb-4 text-decoration-underline">Création de fiche personnage pour jeu de rôle</h1>
+      <h1 class="text-primary fw-bold text-center mb-4 text-decoration-underline">Character Sheet Creation for Role-Playing Game</h1>
       <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-8">
           <form id="charForm" method="POST" enctype="multipart/form-data" class="card shadow p-4 bg-primary text-white">
-            <p class="mb-4 text-center">Veuillez remplir les informations ci-dessous pour créer votre fiche personnage.</p>
+            <p class="mb-4 text-center">
+              Please fill in the information below to create your character sheet.
+            </p>
+            <div class="mb-3 text-center">
+              <button type="button" id="toggle-music" class="btn btn-sm">
+                🔊 Disable music
+              </button>
+            </div>
 
-            <!-- Message d'erreur -->
+            <!-- Error message -->
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               <div class="alert alert-danger" role="alert">
-                <strong>ATTENTION</strong>
+                <strong>WARNING</strong>
                 <ul class="mb-0">
                   {% for category, message in messages %}
                     {{ message }}
@@ -29,115 +36,115 @@
             {% endif %}
             {% endwith %}
 
-            <!-- Formulaire -->
-            <h3 class="mt-4">Identité</h3>
+            <!-- Form -->
+            <h3 class="mt-4">Identity</h3>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="nom" class="form-label">Nom :</label>
-                <input type="text" class="form-control" id="nom" name="nom" value="{{ nom or '' }}" maxlength="30" required>
+                <label for="nom" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ name or '' }}" maxlength="30" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="age" class="form-label">Âge :</label>
+                <label for="age" class="form-label">Age:</label>
                 <input type="number" class="form-control" id="age" name="age" value="{{ age or '' }}" required>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="sexe" class="form-label">Genre :</label>
-                <select class="form-select" id="sexe" name="sexe">
-                  <option value="">Aucun</option>
-                  <option value="Masculin" {% if sexe == 'Masculin' %}selected{% endif %}>Masculin</option>
-                  <option value="Féminin" {% if sexe == 'Féminin' %}selected{% endif %}>Féminin</option>
+                <label for="genre" class="form-label">Gender:</label>
+                <select class="form-select" id="gender" name="gender">
+                  <option value="">None</option>
+                  <option value="Male" {% if gender == 'Male' %}selected{% endif %}>Male</option>
+                  <option value="Female" {% if gender == 'Female' %}selected{% endif %}>Female</option>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="race" class="form-label">Race :</label>
+                <label for="race" class="form-label">Race:</label>
                 <select class="form-select" id="race" name="race" required>
-                  <option value="">Choisir...</option>
-                  <option value="Humain" {% if race == 'Humain' %}selected{% endif %}>Humain</option>
-                  <option value="Elfe" {% if race == 'Elfe' %}selected{% endif %}>Elfe</option>
-                  <option value="Nain" {% if race == 'Nain' %}selected{% endif %}>Nain</option>
+                  <option value="">Choose...</option>
+                  <option value="Human" {% if race == 'Human' %}selected{% endif %}>Human</option>
+                  <option value="Elf" {% if race == 'Elf' %}selected{% endif %}>Elf</option>
+                  <option value="Dwarf" {% if race == 'Dwarf' %}selected{% endif %}>Dwarf</option>
                   <option value="Orc" {% if race == 'Orc' %}selected{% endif %}>Orc</option>
-                  <option value="Gobelin" {% if race == 'Gobelin' %}selected{% endif %}>Gobelin</option>
-                  <option value="Demi-Elfe" {% if race == 'Demi-Elfe' %}selected{% endif %}>Demi-Elfe</option>
-                  <option value="Drakéide" {% if race == 'Drakéide' %}selected{% endif %}>Drakéide</option>
-                  <option value="Tieffelin" {% if race == 'Tieffelin' %}selected{% endif %}>Tieffelin</option>
+                  <option value="Goblin" {% if race == 'Goblin' %}selected{% endif %}>Goblin</option>
+                  <option value="Half-Elf" {% if race == 'Half-Elf' %}selected{% endif %}>Half-Elf</option>
+                  <option value="Dragonborn" {% if race == 'Dragonborn' %}selected{% endif %}>Dragonborn</option>
+                  <option value="Tiefling" {% if race == 'Tiefling' %}selected{% endif %}>Tiefling</option>
                   <option value="Gnome" {% if race == 'Gnome' %}selected{% endif %}>Gnome</option>
                   <option value="Aasimar" {% if race == 'Aasimar' %}selected{% endif %}>Aasimar</option>
                 </select>
               </div>
             </div>
 
-            <h3 class="mt-4">Description physique et morale <small class="text-white-50">(500 caractères max)</small></h3>
+            <h3 class="mt-4">Physical and Moral Description <small class="text-white-50">(500 characters max)</small></h3>
             <div class="mb-3">
               <textarea class="form-control" name="descP" rows="3" maxlength="500" required>{{ descP or '' }}</textarea>
             </div>
 
-            <h3 class="mt-4">Historique et relations <small class="text-white-50">(500 caractères max)</small></h3>
+            <h3 class="mt-4">Background and Relationships <small class="text-white-50">(500 characters max)</small></h3>
             <div class="mb-3">
               <textarea class="form-control" name="descH" rows="3" maxlength="500" required>{{ descH or '' }}</textarea>
             </div>
 
             <div id="competences-section" class="mb-3">
-              <h3>Compétences <small class="text-white-50">(2 minimum, 6 maximum)</small></h3>
+              <h3>Skills <small class="text-white-50">(minimum 2, maximum 6)</small></h3>
               <div id="competences-list" class="mb-3"></div>
               <div class="row g-2 align-items-end">
                 <div class="col-md-4">
-                  <input type="text" class="form-control" id="comp-nom" placeholder="Nom de la compétence" maxlength="30">
+                  <input type="text" class="form-control" id="skill-name" placeholder="Skill name" maxlength="30">
                 </div>
                 <div class="col-md-6">
-                  <textarea class="form-control" id="comp-desc" placeholder="Description" maxlength="200" rows="1"></textarea>
+                  <textarea class="form-control" id="skill-desc" placeholder="Description" maxlength="200" rows="1"></textarea>
                 </div>
                 <div class="col-md-2">
-                  <button type="button" class="btn btn-light w-100" onclick="addCompetence()">Ajouter</button>
+                  <button type="button" class="btn btn-light w-100" onclick="addSkill()">➕</button>
                 </div>
               </div>
             </div>
-            <input type="hidden" name="competences" id="competences-hidden" value='{{ competences|safe }}'>
+            <input type="hidden" name="skills" id="skills-hidden" value='{{ skills|safe }}'>
             <input type="hidden" name="background_filename" value="{{ background_filename }}">
             <input type="hidden" name="avatar_filename" value="{{ avatar_filename }}">
 
-            <h3 class="mt-4">Divers</h3>
+            <h3 class="mt-4">Miscellaneous</h3>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="pv" class="form-label">Points de vie de base :</label>
-                <input type="number" class="form-control" id="pv" name="pv" value="{{ pv or '' }}" required>
+                <label for="pv" class="form-label">Base hit points:</label>
+                <input type="number" class="form-control" id="hp" name="hp" value="{{ hp or '' }}" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="pd" class="form-label">Points de dégâts de base :</label>
-                <input type="number" class="form-control" id="pd" name="pd" value="{{ pd or '' }}" required>
+                <label for="pd" class="form-label">Base damage points:</label>
+                <input type="number" class="form-control" id="dmg" name="dmg" value="{{ dmg or '' }}" required>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="background" class="form-label">Arrière-plan :</label>
+                <label for="background" class="form-label">Background image:</label>
                 <input type="file" class="form-control" name="background" accept="image/*" id="background" {% if not background_filename %}required{% endif %}>
                 {% if background_filename %}
-                  <div class="form-text">Arrière-plan déjà chargé : {{ background_filename }}</div>
+                  <div class="form-text">Background already uploaded: {{ background_filename }}</div>
                 {% endif %}
               </div>
               <div class="col-md-6 mb-3">
-                <label for="avatar" class="form-label">Icône :</label>
+                <label for="avatar" class="form-label">Avatar:</label>
                 <input type="file" class="form-control" name="avatar" accept="image/*" id="avatar" {% if not avatar_filename %}required{% endif %}>
                 {% if avatar_filename %}
-                  <div class="form-text">Icône déjà chargé : {{ avatar_filename }}</div>
+                  <div class="form-text">Avatar already uploaded: {{ avatar_filename }}</div>
                 {% endif %}
               </div>
             </div>
             <div class="row mb-3">
               <div class="col-md-6">
-                <button type="button" class="btn btn-light w-100" onclick="saveFormAsJSON()">Sauvegarder en JSON</button>
+                <button type="button" class="btn btn-light w-100" onclick="saveFormAsJSON()">Save as JSON</button>
               </div>
               <div class="col-md-6">
                 <label class="btn btn-light w-100 mb-0">
-                  Charger un JSON
+                  Load a JSON
                   <input type="file" id="jsonFileInput" accept="application/json" style="display:none" onchange="loadFormFromJSON(event)">
                 </label>
               </div>
             </div>
             <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-light btn-lg fw-bold">Générer le PDF</button>
+              <button type="submit" class="btn btn-light btn-lg fw-bold">Generate PDF</button>
             </div>
           </form>
         </div>
@@ -145,11 +152,35 @@
     </div>
 
   <footer class="bg-dark text-white text-center py-3 w-100" style="background-color: #001f3f !important;">
-    Par Aurélien Sidaner
+    By Aurélien Sidaner
   </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='compForm.js') }}"></script>
     <script src="{{ url_for('static', filename='jsonSave.js') }}"></script>
+
+    <audio id="background-audio" src="{{ url_for('static', filename='song.mp3') }}" autoplay loop>
+      Your browser does not support HTML5 audio.
+    </audio>
+
+    <script>
+      const audio = document.getElementById('background-audio');
+      const btn = document.getElementById('toggle-music');
+      let musicOn = true;
+
+      if (audio && btn) {
+        btn.addEventListener('click', function() {
+          if (musicOn) {
+            audio.pause();
+            btn.innerHTML = '🔇 Enable music';
+          } else {
+            audio.play();
+            btn.innerHTML = '🔊 Disable music';
+          }
+          musicOn = !musicOn;
+        });
+      }
+    </script>
+
   </body>
 </html>

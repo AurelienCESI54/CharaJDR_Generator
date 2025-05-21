@@ -1,63 +1,63 @@
-// Obtenir les informations
+// Get the form data
 function getFormData() {
   const form = document.getElementById('charForm');
   return {
-    nom: form.nom.value,
+    name: form.name.value,
     age: form.age.value,
-    sexe: form.sexe.value,
+    gender: form.gender.value,
     race: form.race.value,
-    pv: form.pv.value,
-    pd: form.pd.value,
+    hp: form.hp.value,
+    dmg: form.dmg.value,
     descP: form.descP.value,
     descH: form.descH.value,
-    competences: form['competences-hidden'].value,
+    skills: form['skills-hidden'].value,
     background_filename: form.background_filename.value,
     avatar_filename: form.avatar_filename.value
   };
 }
 
-// Charger les informations
+// Load the form data
 function setFormData(data) {
   const form = document.getElementById('charForm');
-  if ('nom' in data) form.nom.value = data.nom;
+  if ('name' in data) form.name.value = data.name;
   if ('age' in data) form.age.value = data.age;
-  if ('sexe' in data) form.sexe.value = data.sexe;
+  if ('gender' in data) form.gender.value = data.gender;
   if ('race' in data) form.race.value = data.race;
-  if ('pv' in data) form.pv.value = data.pv;
-  if ('pd' in data) form.pd.value = data.pd;
+  if ('hp' in data) form.hp.value = data.hp;
+  if ('dmg' in data) form.dmg.value = data.dmg;
   if ('descP' in data) form.descP.value = data.descP;
   if ('descH' in data) form.descH.value = data.descH;
-  if ('competences' in data) {
+  if ('skills' in data) {
     try {
-      const competences = JSON.parse(data.competences);
-      if (typeof window.loadCompetencesFromJSON === 'function') {
-        window.loadCompetencesFromJSON(competences);
+      const skills = JSON.parse(data.skills);
+      if (typeof window.loadSkillsFromJSON === 'function') {
+        window.loadSkillsFromJSON(skills);
       } else {
-        form['competences-hidden'].value = data.competences;
+        form['skills-hidden'].value = data.skills;
       }
     } catch (e) {
-      form['competences-hidden'].value = data.competences;
+      form['skills-hidden'].value = data.skills;
     }
   }
   if ('background_filename' in data) form.background_filename.value = data.background_filename;
   if ('avatar_filename' in data) form.avatar_filename.value = data.avatar_filename;
 }
 
-// Sauvegarde en JSON
+// Save as JSON
 function saveFormAsJSON() {
   const data = getFormData();
   const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = (data.nom ? data.nom.replace(/\s+/g,'_') : "fiche") + ".json";
+  a.download = (data.name ? data.name.replace(/\s+/g,'_') : "sheet") + ".json";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-// Charger le JSON
+// Load from JSON
 function loadFormFromJSON(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -67,7 +67,7 @@ function loadFormFromJSON(event) {
       const data = JSON.parse(e.target.result);
       setFormData(data);
     } catch (err) {
-      alert("Fichier JSON invalide.");
+      alert("Invalid JSON file.");
     }
   };
   reader.readAsText(file);

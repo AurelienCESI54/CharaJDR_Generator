@@ -9,7 +9,7 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.enums import TA_JUSTIFY
 from PIL import Image, ImageDraw
 
-# Titre
+# Title
 def add_title(pdf, title):
     pdf.saveState()
     page_width = A4[0]
@@ -33,7 +33,7 @@ def add_title(pdf, title):
     pdf.drawString(text_x, text_y, title)
     pdf.restoreState()
 
-# Arrière-plan du titre
+# Title background
 def draw_title_box(pdf, x, y, box_width, box_height):
     try:
         pdf.setFillAlpha(0.5)
@@ -48,7 +48,7 @@ def draw_title_box(pdf, x, y, box_width, box_height):
     except AttributeError:
         pass
 
-# Mise en forme du titre
+# Title formatting
 def fit_title_font(title, font_name, max_width, min_font_size=8, padding=40):
     font_size = 16
     text_width = stringWidth(title, font_name, font_size)
@@ -56,13 +56,13 @@ def fit_title_font(title, font_name, max_width, min_font_size=8, padding=40):
         font_size -= 1
         text_width = stringWidth(title, font_name, font_size)
     if text_width + padding > max_width:
-        # Tronque le texte si besoin
+        # Truncate text if needed
         while text_width + padding > max_width and len(title) > 3:
             title = title[:-4] + "..."
             text_width = stringWidth(title, font_name, font_size)
     return title, font_size, text_width
 
-# Texte
+# Text
 def add_text(pdf, text, y, left_margin=50, right_margin=50):
     page_width, _ = A4
     max_width = page_width - left_margin - right_margin
@@ -87,7 +87,7 @@ def add_text(pdf, text, y, left_margin=50, right_margin=50):
 
     return y - h - 10
 
-# Arrière-plan du texte
+# Text background
 def draw_text_background(pdf, x, y, width, height, radius=16):
     img = Image.new("RGBA", (int(width), int(height)), (255, 255, 255, int(0.6 * 255)))
     draw = ImageDraw.Draw(img)

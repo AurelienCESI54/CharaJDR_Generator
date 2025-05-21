@@ -1,71 +1,71 @@
-let competences = [];
+let skills = [];
 
-// Exécutée au chargement de la page
+// Executed when the page loads
 window.onload = function() {
   try {
-    const hidden = document.getElementById('competences-hidden');
+    const hidden = document.getElementById('skills-hidden');
     if (hidden && hidden.value) {
-      competences = JSON.parse(hidden.value);
-      updateCompetencesDisplay();
+      skills = JSON.parse(hidden.value);
+      updateSkillsDisplay();
     }
   } catch(e){}
 }
 
-// Ajouter une compétence
-function addCompetence() {
-  const nom = document.getElementById('comp-nom').value.trim();
-  const desc = document.getElementById('comp-desc').value.trim();
+// Add a skill
+function addSkill() {
+  const name = document.getElementById('skill-name').value.trim();
+  const desc = document.getElementById('skill-desc').value.trim();
 
-  if(nom && desc) {
-    if (competences.length >= 6) {
-      alert("Vous ne pouvez pas ajouter plus de 6 compétences.");
+  if(name && desc) {
+    if (skills.length >= 6) {
+      alert("You cannot add more than 6 skills.");
       return;
     }
 
-    competences.push({nom, desc});
-    updateCompetencesDisplay();
+    skills.push({name, desc});
+    updateSkillsDisplay();
 
-    document.getElementById('comp-nom').value = '';
-    document.getElementById('comp-desc').value = '';
-    document.getElementById('competences-hidden').value = JSON.stringify(competences);
+    document.getElementById('skill-name').value = '';
+    document.getElementById('skill-desc').value = '';
+    document.getElementById('skills-hidden').value = JSON.stringify(skills);
   }
 }
 
-// Mise à jour de l'affichage
-function updateCompetencesDisplay() {
-  const list = document.getElementById('competences-list');
+// Update the display
+function updateSkillsDisplay() {
+  const list = document.getElementById('skills-list');
   list.innerHTML = '';
 
-  competences.forEach((c, i) => {
+  skills.forEach((s, i) => {
     list.innerHTML += `
       <div>
-        ${c.nom} : ${c.desc} 
-        <button type="button" onclick="removeCompetence(${i})">Supprimer</button>
+        ${s.name} : ${s.desc} 
+        <button type="button" onclick="removeSkill(${i})">❌</button>
       </div>`;
   });
 
-  document.getElementById('competences-hidden').value = JSON.stringify(competences);
+  document.getElementById('skills-hidden').value = JSON.stringify(skills);
 }
 
-// Supprimer une compétence
-function removeCompetence(index) {
-  competences.splice(index, 1);
-  updateCompetencesDisplay();
-  document.getElementById('competences-hidden').value = JSON.stringify(competences);
+// Remove a skill
+function removeSkill(index) {
+  skills.splice(index, 1);
+  updateSkillsDisplay();
+  document.getElementById('skills-hidden').value = JSON.stringify(skills);
 }
 
-// Importation JSON
-window.loadCompetencesFromJSON = function(newCompetences) {
-  if (!Array.isArray(newCompetences)) return;
-  competences = [];
-  for (let i = 0; i < newCompetences.length && competences.length < 6; i++) {
-    const c = newCompetences[i];
-    if (c.nom && c.desc) {
-      competences.push({
-        nom: String(c.nom).trim().slice(0, 30),
-        desc: String(c.desc).trim().slice(0, 200)
+// JSON Import
+window.loadSkillsFromJSON = function(newSkills) {
+  if (!Array.isArray(newSkills)) return;
+  skills = [];
+  for (let i = 0; i < newSkills.length && skills.length < 6; i++) {
+    const s = newSkills[i];
+    if (s.name && s.desc) {
+      skills.push({
+        name: String(s.name).trim().slice(0, 30),
+        desc: String(s.desc).trim().slice(0, 200)
       });
     }
   }
-  updateCompetencesDisplay();
+  updateSkillsDisplay();
 };
